@@ -1,0 +1,506 @@
+aid: amtrak
+name: Amtrak
+review:
+  question: >-
+    Does Amtrak publish any public or partner API, and what would it cost a
+    customer of Amtrak to leave?
+  answer: partial
+  date: '2026-07-28'
+  reviewer: API Evangelist
+  tier: rail-ground
+  homeMarket: United States
+  primaryDomain: amtrak.com
+findings:
+  summary: |
+    Amtrak publishes exactly one machine-readable contract, it is an open
+    standard, and Amtrak documents it nowhere. A static General Transit Feed
+    Specification archive sits at
+    https://content.amtrak.com/content/gtfs/GTFS.zip and answered HTTP 200 with
+    19,244,661 bytes of application/zip on 2026-07-28. It is completely
+    ungated: no account, no API key, no click-through, no rate limit, no
+    Referer or User-Agent check. It is also completely unadvertised. There is
+    no developer portal, no Developer Resources page, no documentation page,
+    and no terms of use attached to the file. The URL is discoverable only
+    through third-party registries - the Mobility Database lists it as
+    mdb-11 "Official Feed" with producer URL
+    https://content.amtrak.com/content/gtfs/GTFS.zip, and Transitland lists the
+    operator as o-9-amtrak. The feed itself proves first-party provenance:
+    feed_info.txt declares feed_publisher_name "Amtrak" and
+    feed_contact_email "DL_DTGTFSsupport@Amtrak.com".
+
+    Everything transactional is unpublished. There is no REST API, no OpenAPI,
+    no AsyncAPI, no GraphQL, no Postman collection, no NDC and no UIC OSDM
+    anywhere on Amtrak's estate. developer.amtrak.com, docs.amtrak.com,
+    data.amtrak.com and partners.amtrak.com are all NXDOMAIN.
+    developers.amtrak.com resolves only to developers-amtrak.msappproxy.net -
+    a Microsoft Entra ID application proxy fronting an internal corporate app
+    - and does not complete a TLS connection from outside. api.amtrak.com
+    exists but is Akamai NetStorage and answers HTTP 401 on / and on every
+    spec path probed (/openapi.json, /swagger.json, /api-docs, /v1,
+    /.well-known/openid-configuration, /.well-known/oauth-authorization-server).
+    www.amtrak.com returns HTTP 403 to every non-browser client including
+    /robots.txt and /.well-known/security.txt, so no first-party terms of
+    service, privacy policy or travel-agent page could be retrieved
+    programmatically at all.
+
+    The distribution structure is the finding. Amtrak reaches third-party
+    booking tools through intermediaries, not through a published API of its
+    own. Travelport documents Amtrak as a Universal API rail carrier with its
+    own accreditation regime; the legacy RailAgent channel carried Apollo,
+    Sabre and Worldspan agents on amtrak.railagent.com and AAA, Amadeus,
+    Travel Leaders Network and international tour operators on sibling hosts,
+    all of which now 302 to a deprecation notice pointing at
+    https://portal.railagent.com. Amtrak's own B2B programme names RailKey
+    Technologies, Sabre, SilverRail Technologies, Travelfusion and Travelport
+    as the supported third-party booking platforms. A developer does not sign
+    up for an Amtrak API; they get accredited into somebody else's.
+  consumerSurface:
+    website: https://www.amtrak.com/ (HTTP 403 to every non-browser client - Akamai bot mitigation)
+    newsroom: https://media.amtrak.com/ (HTTP 200)
+    vacations: https://www.amtrakvacations.com/ (HTTP 200 - Amtrak Vacations, operated by Yankee Leisure Group)
+    trackYourTrain: https://www.amtrak.com/track-your-train.html (HTTP 403 to non-browser clients)
+    githubOrganization: https://github.com/Amtrak (HTTP 200 via api.github.com - 1 public repo named "Main", created 2014-11-07, no description, no developer content)
+  distributionSurface:
+    ownChannels:
+    - amtrak.com and the Amtrak mobile app
+    - Amtrak call centre
+    - Amtrak Guest Rewards loyalty programme
+    agentPortals:
+    - https://portal.railagent.com/ (HTTP 200, renders a single word "Portal" - a login-gated SPA, no public content)
+    - https://www.railagent.com/ and https://amtrak.railagent.com/ both 302 to https://maintenance.railagent.com/ which reads "Legacy RailAgent Has Been Deprecated. The legacy RailAgent website has now been deprecated. If you were provided access to the new application, you may login here." linking to https://portal.railagent.com
+    - https://aaa.railagent.com/, https://amadeus.railagent.com/, https://amtraktour.railagent.com/ and https://tln.railagent.com/ all 302 to the same deprecation notice
+    intermediariesNamed:
+    - Travelport (Universal API - documented Amtrak carrier requirements)
+    - Sabre
+    - Apollo and Worldspan (legacy RailAgent channel)
+    - SilverRail Technologies
+    - Travelfusion
+    - RailKey Technologies
+    - Spotnana (corporate OBT, integrated on "the latest version of Amtrak's API with the highest level of connectivity available")
+    - TravelPerk (via SilverRail)
+  probes:
+    date: '2026-07-28'
+    dns:
+    - host: developer.amtrak.com
+      result: NXDOMAIN
+    - host: docs.amtrak.com
+      result: NXDOMAIN
+    - host: data.amtrak.com
+      result: NXDOMAIN
+    - host: partners.amtrak.com
+      result: NXDOMAIN
+    - host: developers.amtrak.com
+      result: CNAME developers-amtrak.msappproxy.net -> cwap-nam1-runtime.routing.msappproxy.net (Microsoft Entra ID application proxy); TLS connection did not complete from outside
+    http:
+    - url: https://content.amtrak.com/content/gtfs/GTFS.zip
+      status: 200
+      contentType: application/zip
+      bytes: 19244661
+      note: HARVESTED. Parses cleanly as a GTFS static archive.
+    - url: https://content.amtrak.com/
+      status: 404
+    - url: https://content.amtrak.com/content/gtfs/
+      status: 404
+    - url: https://content.amtrak.com/content/gtfs/GTFS-RT.zip
+      status: 404
+    - url: https://content.amtrak.com/content/gtfs/GTFS-RT-Alerts.pb
+      status: 404
+    - url: https://content.amtrak.com/content/gtfs/GTFS-RT-TripUpdates.pb
+      status: 404
+    - url: https://content.amtrak.com/content/gtfs/GTFS-RT-VehiclePositions.pb
+      status: 404
+      note: No GTFS-Realtime feed is published by Amtrak at any conventional path.
+    - url: https://www.amtrak.com/
+      status: 403
+      note: Akamai bot mitigation. HTTP/2 and HTTP/1.1, with and without full browser headers, all refused.
+    - url: https://www.amtrak.com/robots.txt
+      status: 403
+    - url: https://www.amtrak.com/.well-known/security.txt
+      status: 403
+    - url: https://www.amtrak.com/developers
+      status: 403
+    - url: https://www.amtrak.com/api
+      status: 403
+    - url: https://www.amtrak.com/openapi.json
+      status: 403
+    - url: https://www.amtrak.com/travel-agent-resource-center
+      status: timeout
+      note: Both curl and a rendering fetcher timed out. No first-party travel-agent terms could be read.
+    - url: https://www.amtrak.com/content/dam/projects/dotcom/english/public/documents/environmental1/Amtrak-B2B-Program-Amtrak-Online-for-3rd-Party-Booking-Tools.pdf
+      status: 403
+      note: The Amtrak B2B Program PDF is indexed by search engines but 403s to direct fetch.
+    - url: https://aemqa.amtrak.com/about-amtrak/travel-agent-resource-center/corporate-travel-agents.html
+      status: 403
+    - url: https://api.amtrak.com/
+      status: 401
+      server: AkamaiNetStorage
+      note: Every path probed returns 401 - /openapi.json, /swagger.json, /api-docs, /v1, /.well-known/openid-configuration, /.well-known/oauth-authorization-server. This is a credentialed asset host, not a documented API.
+    - url: https://maps.amtrak.com/
+      status: 403
+    - url: https://maps.amtrak.com/services/MapDataService/trains/getTrainsData
+      status: 200
+      contentType: text/plain
+      bytes: 1035224
+      note: Ungated but the body is a base64 blob of encrypted data, not JSON. Undocumented. NOT listed in apis.yml.
+    - url: https://maps.amtrak.com/services/MapDataService/stations/trainStations
+      status: 200
+      contentType: text/plain
+      bytes: 453168
+      note: Same encrypted-blob shape. Undocumented. NOT listed in apis.yml.
+    - url: https://maps.amtrak.com/rttl/js/RoutesList.json
+      status: 200
+      contentType: application/json
+      bytes: 3720
+      note: Plain JSON list of route names with Amtrak CMSID values and map zoom levels. Undocumented internal file backing the Track Your Train map. NOT listed in apis.yml.
+    - url: https://maps.amtrak.com/rttl/js/RoutesList.v.json
+      status: 200
+      contentType: application/json
+      bytes: 15073
+    - url: https://portal.railagent.com/
+      status: 200
+      note: Login-gated SPA. Body renders the single word "Portal".
+    - url: https://www.railagent.com/
+      status: 200
+      redirect: https://maintenance.railagent.com/
+    - url: https://amtrak.railagent.com/
+      status: 200
+      redirect: https://maintenance.railagent.com/
+    - url: https://api.github.com/orgs/Amtrak
+      status: 200
+      note: 1 public repo ("Main"), no description, no developer content.
+    - url: https://api.apis.guru/v2/list.json
+      status: 200
+      note: Queried for any Amtrak entry. Zero matches - no OpenAPI for Amtrak exists in the APIs.guru directory.
+  probeMethodologyWarning: >-
+    portal.railagent.com is a single-page application with a catch-all route.
+    /api-docs, /api, /docs and /.well-known/openid-configuration all returned
+    HTTP 200 with 982 bytes of text/html - and so did
+    /definitely-not-a-real-path-12345, byte-for-byte identical. Every 200 on
+    that host is a false positive and none of them is an API contract. This was
+    verified with a control request before any of them were believed.
+  observedButUndocumented:
+  - host: maps.amtrak.com
+    paths:
+    - /services/MapDataService/trains/getTrainsData
+    - /services/MapDataService/stations/trainStations
+    - /rttl/js/RoutesList.json
+    - /rttl/js/RoutesList.v.json
+    note: >-
+      The backend of Amtrak's public Track Your Train map. Ungated and live,
+      but the two MapDataService endpoints return an encrypted base64 payload
+      rather than readable JSON - Amtrak deliberately obfuscates the data
+      rather than publishing it, and the community projects that consume it
+      (piemadd/amtrak, StefanBossbaly/amtrak-api, kurtraschke/amtk-gtfsrealtime,
+      catenarytransit/amtrak-gtfs-rt, api.amtraker.com) all decrypt it. There
+      is no documentation, no terms of use, no licence, no versioning and no
+      stability commitment, so none of it is listed in apis.yml.
+  - host: api.amtrak.com
+    note: >-
+      Live host, HTTP 401 on every path, Akamai NetStorage. No published
+      contract, no documentation, no terms.
+  - host: developers.amtrak.com
+    note: >-
+      Resolves to a Microsoft Entra ID application proxy. This is an internal
+      corporate application published externally behind Entra authentication,
+      not a public developer portal.
+switchingCost:
+  interfaceShape:
+    value: open-standard
+    standardNamed: >-
+      GTFS - the General Transit Feed Specification (static). The harvested
+      archive declares agency.txt, calendar.txt, feed_info.txt, routes.txt,
+      shapes.txt, stops.txt, stop_times.txt and trips.txt, all conformant to
+      the GTFS reference at https://gtfs.org/documentation/schedule/reference/.
+      No GTFS-Realtime, no GTFS-Fares, no GTFS ticketing extension.
+    evidence: >-
+      The 2026-07-28 archive (feed_version 20260727) parses with a plain CSV
+      reader against the GTFS reference - 8 files, 20 agencies, 61 routes (49
+      with route_type 2 rail and 12 with route_type 3 bus), 646 stops, 2,948
+      trips, 37,862 stop times, 373,236 shape points, calendar service window
+      20260726 to 20270726. GTFS is implemented by thousands of agencies
+      worldwide and consumed by Google Maps, Transit, Rome2Rio,
+      OpenTripPlanner, Transitland and the Mobility Database, so Amtrak's
+      schedule contract is genuinely swappable: a consumer that already ingests
+      GTFS ingests Amtrak with zero new code.
+    scopeCaveat: >-
+      This value describes the ONLY contract Amtrak publishes, and it covers
+      schedules alone. The transactional half of the business - search and
+      shopping, offers and pricing, booking and order, payment, fulfilment and
+      ticketing, servicing and changes, loyalty, content and imagery - is
+      none-published. Read the two together: an open standard for reading the
+      timetable, and nothing at all for selling a seat. Amtrak is a step behind
+      VIA Rail Canada on the published side, because VIA at least publishes a
+      Developer Resources page with a named licence; Amtrak publishes the file
+      and says nothing about it.
+    negativeFindings:
+    - No OpenAPI or Swagger document exists anywhere on the Amtrak estate or in the APIs.guru directory.
+    - No AsyncAPI, GraphQL schema, Postman collection or Arazzo workflow was found.
+    - IATA NDC appears nowhere - Amtrak is a rail operator, not an IATA airline.
+    - UIC Open Sales and Distribution Model (OSDM), the rail equivalent of NDC, appears nowhere.
+    - No GTFS-Realtime feed is published, despite Amtrak operating a live train-tracking map whose data it encrypts.
+  secondSource:
+    value: no-alternative
+    alternativesConsidered: >-
+      For Amtrak seat inventory there is no second source. Amtrak is the
+      federally chartered national intercity passenger rail operator of the
+      United States and is the only route to an Amtrak seat. Alternatives
+      considered and rejected: Brightline (private, Florida and future Las
+      Vegas corridors, its own inventory, not a source of Amtrak content); the
+      commuter authorities - Metra, LIRR, Metro-North, NJ Transit, SEPTA,
+      Caltrain, Metrolink - which run distinct services on some shared track
+      but do not resell Amtrak inventory; VIA Rail Canada, a partner on the
+      jointly operated Toronto-New York Maple Leaf that appears inside Amtrak's
+      own GTFS as a route_long_name, not a reseller; Greyhound, FlixBus and
+      Megabus and the domestic airlines as modal substitutes for the journey
+      rather than for the inventory. The important nuance that separates Amtrak
+      from VIA Rail: there ARE multiple CHANNELS to the same single inventory -
+      Travelport Universal API, Sabre, the RailAgent portal, SilverRail,
+      Travelfusion, RailKey Technologies and direct - so a distributor choosing
+      how to reach Amtrak has alternatives-with-migration at the channel layer
+      even though the content behind every one of them is monopoly content. For
+      the SCHEDULE DATA the picture inverts completely: GTFS is a commodity
+      format and a consumer can move their ingestion to any other GTFS
+      publisher without touching their parser. Amtrak has made the cheap half
+      of its data maximally portable and the expensive half unreachable.
+  exitPath:
+    value: no-export-published
+    operationCited: >-
+      None. No export, dump, bulk or data-portability operation exists on any
+      Amtrak API, because no transactional API is published. No consumer-facing
+      data-portability commitment could be verified either: www.amtrak.com
+      returns HTTP 403 to every non-browser client, so the privacy policy,
+      terms of use and any California CCPA or state-privacy request mechanism
+      could not be retrieved programmatically at all. Nothing is published
+      about exporting a booking history, an Amtrak Guest Rewards points
+      balance, or an agency's transaction record out of the RailAgent portal.
+    statutoryRouteNotVerified: >-
+      Amtrak is a federally chartered corporation and does answer Freedom of
+      Information Act requests - a response numbered 26-FOI-00215 is quoted on
+      the OpenStreetMap community forum at
+      https://community.openstreetmap.org/t/gtfs-data-for-amtrak-us/98342. That
+      is a third-party report, not a first-party page, and because
+      www.amtrak.com is unreachable to non-browser clients the Amtrak FOIA
+      programme page could not be confirmed. The value is therefore recorded as
+      no-export-published rather than export-on-request: a statutory paper
+      request that could not be verified first-party is not an exit path.
+    counterweight: >-
+      The GTFS feed is itself a complete bulk download - every consumer gets
+      the whole dataset every time - so for schedule data there is no lock-in to
+      exit from. That is Amtrak's data about its own network, though, not the
+      customer's data about their own bookings.
+  identifierPortability:
+    value: >-
+      A clean split - de facto industry-shared station codes on the published
+      side, Amtrak-internal opaque integers underneath them, and nothing at all
+      verifiable on the commercial side.
+    identifiersFound:
+    - 'GTFS stop_id and stop_code: the Amtrak three-letter station codes, identical in both columns - ABE Aberdeen, ABQ Albuquerque Alvarado Transportation Center, ACD Arcadia Valley, ADM Ardmore. 646 of them. These are the codes printed on Amtrak tickets and used across US rail, so they travel between systems.'
+    - 'GTFS stop_url: per-station deep links of the form https://www.amtrak.com/stations/abe - an Amtrak-proprietary URL pattern, but derivable from the station code.'
+    - 'GTFS agency_id: Amtrak-internal integers (1228 Temporary Amtrak Chartered Vehicle, 147 Roadrunner Shuttle, 157 Via Rail Canada, 28 Amtrak Chartered Vehicle, 43 Arrow Trailways) - 20 agencies covering Amtrak itself plus the Thruway bus operators and VIA Rail.'
+    - 'GTFS route_id: opaque Amtrak-internal integers (18650, 42920, 43, 54, 56) with no external meaning. Route identity is carried only in route_long_name.'
+    - 'GTFS trip_id and service_id: opaque Amtrak-internal integers (trip_id 182346, service_id 312762077207).'
+    - 'GTFS trip_short_name: Amtrak train numbers (307, 341, 342, 392, 393) - the number a passenger sees, and the key every downstream tracking project joins on.'
+    - 'maps.amtrak.com RoutesList.json CMSID: Amtrak content-management identifiers (1241245664867 for Acela, 1237608341980 for the California Zephyr) - wholly proprietary, undocumented.'
+    note: >-
+      Because the station keys are the public three-letter Amtrak codes, a
+      developer's schedule data stays legible after switching to any other GTFS
+      publisher, and the codes even survive across the border on the jointly
+      operated Maple Leaf. What does not travel is everything commercial. No
+      Amtrak reservation number format, PNR record-locator scheme, GDS record
+      ID, IATA or ARC agency number requirement, or loyalty account key could
+      be verified from any first-party Amtrak source, because Amtrak publishes
+      no API contract and its website refuses non-browser clients. The
+      identifiers that would make an Amtrak booking portable between
+      distributors exist inside Travelport, Sabre and the RailAgent portal, and
+      none of those schemas is public.
+  contractualLockIn:
+    published: false
+    firstPartyRetrievable: false
+    blocker: >-
+      www.amtrak.com returns HTTP 403 to every non-browser client - curl over
+      HTTP/2 and HTTP/1.1, with and without a full Chrome header set, and a
+      rendering fetcher which timed out. /robots.txt, /.well-known/security.txt,
+      /terms-of-use, /travel-agent-resource-center and the Amtrak B2B Program
+      PDF are all unreachable. No Amtrak terms of service, privacy policy,
+      travel-agent agreement, commission schedule or API terms could be quoted
+      first-party. This is itself a finding: Amtrak's contractual posture is
+      not machine-readable, not agent-readable, and not verifiable without a
+      browser.
+    verbatimThirdParty:
+      gtfsLicencePosition: >-
+        Quoted from Amtrak's response to FOIA request 26-FOI-00215, as
+        reproduced on the OpenStreetMap community forum: "Amtrak has no
+        restrictions on the use of our GTFS feed currently, nor do we require a
+        licence to use the feed for commercial purposes as long as the user has
+        the intent to benefit Amtrak and drive Amtrak consumer engagement."
+        This is the only statement of Amtrak's GTFS terms that exists anywhere,
+        it is not published on amtrak.com, and it is conditional in a way no
+        open-data licence is - the forum thread concluded OpenStreetMap could
+        not use the feed because the "intent to benefit Amtrak" condition is
+        incompatible with an open database licence. A conditional,
+        unpublished, FOIA-disclosed permission is not a licence.
+      travelportAccreditation: >-
+        Travelport's Universal API "Amtrak Carrier Requirements" page at
+        https://support.travelport.com/webhelp/uapi/Content/Rail/Shared_Rail_Topics/Amtrak_Carrier_Requirements.htm
+        states that Amtrak requires "certification and approval before granting
+        both pre-production and production credentials", that "Amtrak/Travelport
+        will provide an accreditation document and test cases worksheet
+        separately", that the partner must document results of the required
+        scenarios in an Excel worksheet and pass a three-week UAT with both
+        Travelport and Amtrak, and that "Partners must be able to support the
+        refund fees and eVoucher issuance that is part of our cancellation
+        process." It also records that "eVouchers as payment not currently
+        supported, redeemed only via Amtrak" - Amtrak retains the redemption
+        leg of its own refund currency.
+      capabilityScope: >-
+        The same Travelport page defines the required capability set as
+        "Shopping / Booking / Payment / Travel Document Delivery" plus "Cancel
+        / Refund / Travel Document Delivery" - the real segmentation of the
+        Amtrak API family, none of which Amtrak itself documents publicly.
+    notPublished:
+    - No API terms of use, rate limits, SLA, deprecation policy or versioning policy - no transactional API is published.
+    - No terms of use, licence or attribution requirement is attached to the GTFS file, and no page describes it.
+    - No GTFS update cadence, changelog or feed-stability commitment beyond the feed_start_date 20260728 / feed_end_date 20260803 one-week window declared in feed_info.txt.
+    - No travel agency agreement, tour operator agreement or B2B agreement text is retrievable.
+    - No commission schedule, segment fee, debit memo policy or minimum term for agencies could be verified first-party.
+    - No termination notice period, exclusivity, full-content or most-favoured-nation clause could be verified.
+    - No published anti-scraping clause could be read, though the 403 posture on www.amtrak.com and the encryption of the Track Your Train payload are the operational equivalent.
+  accessGate:
+    value: commercial-agreement
+    whatADeveloperMustSign: >-
+      To transact, a developer signs nothing with Amtrak directly - they get
+      accredited into an intermediary. Per Travelport's published Amtrak
+      Carrier Requirements: contact an Account Manager, who raises an internal
+      provisioning request and helps complete "the required API form"; receive
+      pre-production credentials; obtain the Amtrak accreditation document and
+      the test cases worksheet, which must be requested separately; build
+      Look / Book / Pay / eTicket plus Cancel / Refund / Travel Document
+      Delivery; document results of every required scenario in an Excel
+      worksheet; pass a three-week joint Travelport and Amtrak UAT; and commit
+      to supporting Amtrak refund fees and eVoucher issuance. Production
+      credentials and a certification letter follow in 7-10 working days. The
+      travel-agency route is the RailAgent portal at
+      https://portal.railagent.com, which is login-only with no public
+      registration path visible; the legacy per-GDS hosts (amtrak, aaa,
+      amadeus, amtraktour, tln .railagent.com) now all redirect to a
+      deprecation notice.
+    publishedSurfaceGate: >-
+      For the one published API surface the gate is nothing at all. A developer
+      fetches https://content.amtrak.com/content/gtfs/GTFS.zip and gets 19 MB
+      of GTFS. No account, no registration form, no API key, no click-through,
+      no rate limit, no Referer or User-Agent check. But Amtrak does not offer
+      it - there is no Developer Resources page, no link, no documentation and
+      no terms - so calling it self-serve would overstate the invitation. It is
+      ungated by omission rather than by policy, which is why the top-line gate
+      is recorded as the commercial one.
+    accreditationRequired: >-
+      Travelport's Amtrak page does not name ARC or IATA accreditation as an
+      Amtrak requirement; the accreditation Amtrak requires is its own
+      document plus the Travelport certification. No ARC or IATA number
+      requirement could be verified from any first-party Amtrak source.
+  distributionModel:
+    value: gds-intermediated
+    evidence: >-
+      Amtrak content reaches third parties through intermediaries in every
+      documented case. Travelport publishes Amtrak carrier requirements for its
+      Universal API. The RailAgent channel was organised by GDS - amtrak.railagent.com
+      for Apollo, Sabre and Worldspan agents; amadeus.railagent.com for Amadeus;
+      aaa.railagent.com for AAA; tln.railagent.com for Travel Leaders Network;
+      amtraktour.railagent.com for international tour operators - all now
+      consolidated behind https://portal.railagent.com. Amtrak's own B2B
+      programme material names RailKey Technologies, Sabre, SilverRail
+      Technologies, Travelfusion and Travelport as the supported third-party
+      booking platforms whose reservations are then visible on amtrak.com and
+      in the Amtrak apps. Spotnana states it uses "the latest version of
+      Amtrak's API with the highest level of connectivity available" and
+      SilverRail supplies Amtrak content to TravelPerk. Amtrak's direct
+      channels - amtrak.com, the mobile app, the call centre and Amtrak Guest
+      Rewards - sit alongside all of that. What Amtrak does NOT do is publish
+      the API that all of these partners consume.
+    ndcPosture: >-
+      Not applicable. IATA NDC governs airline offer and order management;
+      Amtrak is a rail operator and NDC appears nowhere in its estate. The rail
+      equivalent is the UIC Open Sales and Distribution Model, and Amtrak does
+      not reference OSDM either. There is no certification level, no NDC or
+      OSDM endpoint, and no published surcharge or full-content position -
+      Amtrak's inventory reaches the GDSs through a private carrier API whose
+      contract is documented by Travelport rather than by Amtrak.
+    platformStackObserved: >-
+      www.amtrak.com and api.amtrak.com are fronted by Akamai (api.amtrak.com
+      reports Server: AkamaiNetStorage); content.amtrak.com serves static
+      assets and the GTFS archive; maps.amtrak.com serves the Track Your Train
+      map from a Java-style /services/MapDataService path with an encrypted
+      payload; developers.amtrak.com is published through Microsoft Entra ID
+      application proxy (msappproxy.net); portal.railagent.com is a modern SPA
+      with a catch-all route. None of this is documented by Amtrak.
+sources:
+- url: https://content.amtrak.com/content/gtfs/GTFS.zip
+  type: GTFS
+  status: 200
+  fetched: '2026-07-28'
+  note: The only first-party machine-readable contract Amtrak publishes. Harvested verbatim to gtfs/amtrak-gtfs.zip.
+- url: https://mobilitydatabase.org/feeds/gtfs/mdb-11
+  type: Registry
+  status: 200
+  fetched: '2026-07-28'
+  note: Lists the Amtrak feed as an "Official Feed" with producer URL https://content.amtrak.com/content/gtfs/GTFS.zip, 61 routes, United States and Canada. Third-party registry - Amtrak publishes no equivalent page.
+- url: https://www.transit.land/operators/o-9-amtrak
+  type: Registry
+  note: Transitland operator record for Amtrak.
+- url: https://support.travelport.com/webhelp/uapi/Content/Rail/Shared_Rail_Topics/Amtrak_Carrier_Requirements.htm
+  type: Documentation
+  status: 200
+  fetched: '2026-07-28'
+  note: The single richest published description of what Amtrak requires of an API partner - accreditation document, test cases worksheet, Look/Book/Pay/eTicket plus Cancel/Refund, three-week UAT, mandatory refund-fee and eVoucher support. Published by Travelport, not by Amtrak.
+- url: https://community.openstreetmap.org/t/gtfs-data-for-amtrak-us/98342
+  type: Reference
+  status: 200
+  fetched: '2026-07-28'
+  note: Reproduces Amtrak's FOIA response 26-FOI-00215 on GTFS licensing. Third-party, unverifiable first-party.
+- url: https://www.spotnana.com/blog/spotnana-integrates-amtrak-with-latest-api/
+  type: Reference
+  status: 200
+  fetched: '2026-07-28'
+  note: Corporate OBT describing its integration on "the latest version of Amtrak's API with the highest level of connectivity available" - shopping across all Amtrak routes, fare classes, refundable ticket types, Amtrak Guest Rewards accrual, carbon output at checkout.
+- url: https://www.railagent.com/
+  type: Portal
+  status: 200
+  fetched: '2026-07-28'
+  note: Redirects to https://maintenance.railagent.com/ - "Legacy RailAgent Has Been Deprecated".
+- url: https://portal.railagent.com/
+  type: Portal
+  status: 200
+  fetched: '2026-07-28'
+  note: The current RailAgent application. Login-gated SPA with a catch-all route; every path returns the same 982-byte shell.
+- url: https://api.github.com/orgs/Amtrak
+  type: GitHubOrganization
+  status: 200
+  fetched: '2026-07-28'
+  note: 1 public repo ("Main"), created 2014-11-07, no description, no developer content.
+- url: https://api.apis.guru/v2/list.json
+  type: Registry
+  status: 200
+  fetched: '2026-07-28'
+  note: Zero Amtrak entries - no OpenAPI for Amtrak exists in the APIs.guru directory.
+- url: https://gtfs.org/documentation/schedule/reference/
+  type: Specification
+  note: The GTFS static reference the harvested archive was validated against.
+actions:
+  openapiHarvested: false
+  specsCount: 0
+  gtfsHarvested: true
+  gtfsPath: gtfs/amtrak-gtfs.zip
+  apisListed: 1
+  developerPortal: null
+  portalConfirmed: false
+  reason: >-
+    No OpenAPI, AsyncAPI, GraphQL schema or Postman collection exists anywhere
+    on Amtrak's estate or in the APIs.guru directory, so the openapi/ directory
+    is deliberately absent rather than empty. One real machine-readable
+    contract was found and harvested verbatim - the GTFS schedule feed - and it
+    is the single entry in apis.yml. The live undocumented surfaces
+    (maps.amtrak.com MapDataService and RoutesList.json, api.amtrak.com) are
+    recorded in observedButUndocumented and excluded from apis.yml, because
+    none has a published contract, licence or terms of use, and the two
+    MapDataService endpoints return encrypted payloads that Amtrak has
+    deliberately obfuscated.

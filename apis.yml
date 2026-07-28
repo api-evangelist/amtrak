@@ -1,0 +1,108 @@
+aid: amtrak
+name: Amtrak
+url: https://raw.githubusercontent.com/api-evangelist/amtrak/refs/heads/main/apis.yml
+kind: company
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+description: >-
+  Amtrak (the National Railroad Passenger Corporation) is the federally chartered
+  operator of the United States national intercity passenger rail network,
+  headquartered in Washington, D.C. It runs the Northeast Corridor including
+  Acela, the state-supported corridors, the long-distance network, and the
+  Amtrak Thruway Connecting Service bus network, and its published GTFS feed
+  covers 61 routes, 646 stops, 2,948 trips and 20 operating agencies across the
+  United States and into Canada. In the distribution chain Amtrak sits as a
+  GDS-intermediated supplier of its own inventory: its content reaches
+  third-party booking tools through Travelport Universal API, through Sabre,
+  Apollo and Worldspan on the RailAgent channel, and through rail aggregators
+  including SilverRail, Travelfusion and RailKey Technologies, alongside its own
+  amtrak.com, mobile app and call centre. Its API posture is honestly stated as
+  one open-standard data feed and nothing else. The only machine-readable
+  contract Amtrak publishes is a static GTFS schedule archive at
+  content.amtrak.com, which is completely ungated - no key, no registration, no
+  click-through - but which Amtrak advertises nowhere: there is no developer
+  portal, no documentation page, no OpenAPI, no AsyncAPI, no GraphQL, and no
+  published terms of use for the feed. Everything transactional is closed. The
+  developer., docs., data. and partners. subdomains of amtrak.com do not
+  resolve, developers.amtrak.com resolves only to a Microsoft Entra application
+  proxy, api.amtrak.com answers 401 on every path from Akamai NetStorage, and
+  www.amtrak.com returns 403 to every non-browser client, so no first-party
+  terms of service could be retrieved programmatically. A developer who wants
+  shopping, booking, payment, ticketing or servicing does not sign up; they are
+  accredited through Travelport or an aggregator, complete an Amtrak test-case
+  worksheet, pass a three-week UAT, and commit to supporting Amtrak refund fees
+  and eVoucher issuance before production credentials are issued.
+tags:
+- Travel
+- United States
+- Rail
+- Passenger Rail
+- Transit
+- GTFS
+- Open Data
+- Booking
+- Distribution
+- GDS
+- Corporate Travel
+- Travel Agents
+- Loyalty
+created: '2026-07-28'
+modified: '2026-07-28'
+specificationVersion: '0.19'
+apis:
+- aid: amtrak:amtrak-gtfs-schedule-feed
+  name: Amtrak GTFS Schedule Feed
+  description: >-
+    Amtrak's complete national timetable published as a static General Transit
+    Feed Specification archive, served from content.amtrak.com with no
+    registration, no API key, no click-through licence and no rate limit. The
+    edition harvested on 2026-07-28 carries feed_version 20260727 and holds 8
+    GTFS files - agency, calendar, feed_info, routes, shapes, stops, stop_times
+    and trips - covering 20 agencies, 61 routes (49 rail and 12 bus by
+    route_type), 646 stops, 2,948 trips, 37,862 stop times and 373,236 shape
+    points, with calendar service dates spanning 20260726 to 20270726. The named
+    routes include Acela, the Auto Train, the California Zephyr, the Coast
+    Starlight, the Empire Builder, the Crescent, the Cardinal, Amtrak Cascades,
+    the Capitol Corridor, the Hartford Line, the Downeaster, the Borealis, the
+    Berkshire Flyer and the Amtrak Thruway Connecting Service, and stop_id is
+    the familiar Amtrak three-letter station code. feed_info declares
+    feed_publisher_name Amtrak and a first-party contact address of
+    DL_DTGTFSsupport@Amtrak.com. This is the only machine-readable contract
+    Amtrak publishes, and Amtrak publishes no page describing it - the URL is
+    discoverable only through third-party registries such as the Mobility
+    Database and Transitland.
+  humanURL: https://mobilitydatabase.org/feeds/gtfs/mdb-11
+  baseURL: https://content.amtrak.com/content/gtfs/GTFS.zip
+  tags:
+  - GTFS
+  - Schedules
+  - Timetables
+  - Transit
+  - Open Data
+  - Rail
+  properties:
+  - type: GTFS
+    url: gtfs/amtrak-gtfs.zip
+  - type: Download
+    url: https://content.amtrak.com/content/gtfs/GTFS.zip
+  - type: Specification
+    url: https://gtfs.org/documentation/schedule/reference/
+  - type: Registry
+    url: https://mobilitydatabase.org/feeds/gtfs/mdb-11
+  - type: Registry
+    url: https://www.transit.land/operators/o-9-amtrak
+  - type: Email
+    url: mailto:DL_DTGTFSsupport@Amtrak.com
+common:
+- type: Website
+  url: https://www.amtrak.com/
+- type: Newsroom
+  url: https://media.amtrak.com/
+- type: TravelAgentPortal
+  url: https://portal.railagent.com/
+- type: GitHubOrganization
+  url: https://github.com/Amtrak
+- type: LinkedIn
+  url: https://www.linkedin.com/company/amtrak
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
