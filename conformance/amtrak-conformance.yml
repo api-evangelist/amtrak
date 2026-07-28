@@ -1,0 +1,102 @@
+generated: '2026-07-28'
+method: derived
+source: gtfs/amtrak-gtfs.zip parsed against https://gtfs.org/documentation/schedule/reference/
+summary: >-
+  Amtrak conforms to exactly one standard - GTFS Schedule (static) - and to no
+  other. It makes no published compliance claim anywhere, so nothing here is a
+  provider assertion; every entry was verified by parsing the harvested archive
+  or by a live probe.
+standards:
+- id: gtfs-schedule-static
+  name: GTFS Schedule (static)
+  reference: https://gtfs.org/documentation/schedule/reference/
+  conforms: true
+  evidence: >-
+    All six GTFS-required datasets are present and parse - agency.txt (20 rows),
+    stops.txt (646), routes.txt (61), trips.txt (2,948), stop_times.txt (37,862)
+    and calendar.txt (403) - plus the optional feed_info.txt (1) and shapes.txt
+    (373,236). Every required field is populated: routes carry route_id +
+    route_type (49 with route_type 2 rail, 12 with route_type 3 bus), stops
+    carry stop_id + stop_name + stop_lat/stop_lon, trips carry
+    route_id + service_id + trip_id, stop_times carry trip_id + arrival_time +
+    departure_time + stop_id + stop_sequence. Referential integrity holds:
+    trips.route_id resolves into routes, trips.service_id into calendar,
+    trips.shape_id into shapes and stop_times.stop_id into stops.
+  extensions_absent:
+  - calendar_dates.txt (no service exceptions published)
+  - fare_attributes.txt / fare_rules.txt (GTFS-Fares v1)
+  - fare_media.txt / fare_products.txt / rider_categories.txt (GTFS-Fares v2)
+  - frequencies.txt, transfers.txt, pathways.txt, levels.txt
+  - translations.txt, attributions.txt
+- id: gtfs-realtime
+  name: GTFS-Realtime
+  reference: https://gtfs.org/documentation/realtime/reference/
+  conforms: false
+  evidence: >-
+    No GTFS-Realtime feed is published. GTFS-RT.zip, GTFS-RT-Alerts.pb,
+    GTFS-RT-TripUpdates.pb and GTFS-RT-VehiclePositions.pb all return 404 on
+    content.amtrak.com. Amtrak runs a live Track Your Train map whose backing
+    payloads at maps.amtrak.com are returned as an encrypted base64 blob rather
+    than as a protobuf feed; the community projects that consume it decrypt it.
+- id: gtfs-fares-v2
+  name: GTFS-Fares v2
+  conforms: false
+  evidence: No fare files of any generation appear in the archive.
+- id: uic-osdm
+  name: UIC Open Sales and Distribution Model
+  reference: https://osdm.io/
+  conforms: false
+  evidence: >-
+    OSDM - the rail equivalent of NDC and the standard a European operator would
+    publish for shopping and booking - appears nowhere on the Amtrak estate.
+- id: iata-ndc
+  name: IATA New Distribution Capability
+  conforms: false
+  evidence: Not applicable - Amtrak is a rail operator, not an IATA airline.
+- id: openapi
+  name: OpenAPI
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document exists on any Amtrak host or in the APIs.guru
+    directory. /openapi.json is 404 on content.amtrak.com, 401 on
+    api.amtrak.com, and unreachable on www.amtrak.com.
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  evidence: No event, streaming or webhook surface is published.
+- id: graphql
+  name: GraphQL
+  conforms: false
+  evidence: No /graphql surface was found on any resolving Amtrak host.
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: >-
+    The published feed requires no authentication at all;
+    /.well-known/oauth-authorization-server is 404 on content.amtrak.com and 401
+    on api.amtrak.com.
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 / 401 on every Amtrak host.
+- id: rfc9457-problem-details
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: No structured error body is returned; failures are bare edge status codes.
+- id: rfc9116-security-txt
+  name: RFC 9116 security.txt
+  conforms: false
+  evidence: /.well-known/security.txt is 404 on content.amtrak.com and media.amtrak.com, 401 on api.amtrak.com, and unreachable on www.amtrak.com.
+- id: rfc8594-sunset-header
+  name: RFC 8594 Sunset HTTP Header
+  conforms: false
+  evidence: No Sunset or Deprecation header is sent; no deprecation policy is published.
+compliance_program:
+  published: false
+  note: >-
+    Amtrak publishes no trust centre and no certification list. trust.amtrak.com
+    and security.amtrak.com are NXDOMAIN. As a federally chartered corporation
+    Amtrak is subject to federal oversight and its Office of Inspector General
+    at https://amtrakoig.gov/ publishes audit reports, but that is a statutory
+    oversight body, not a provider-published compliance posture, so no
+    Compliance pointer is emitted.

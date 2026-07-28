@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/amtrak/refs/heads/main/json-schema/amtrak-gtfs-schema.json",
+  "title": "Amtrak GTFS Schedule Feed record schemas",
+  "description": "JSON Schema for each record type in the Amtrak GTFS static archive at https://content.amtrak.com/content/gtfs/GTFS.zip, derived on 2026-07-28 from the harvested edition feed_version 20260727 (gtfs/amtrak-gtfs.zip). Properties are the exact CSV header columns present in Amtrak's archive - not the full GTFS reference - so a validator built from this document reflects what Amtrak actually ships. Every CSV value arrives as a string; the type keywords below describe the value after parsing, and pattern/format constraints follow the GTFS Schedule reference at https://gtfs.org/documentation/schedule/reference/. Amtrak publishes no schema of its own.",
+  "x-generated": "2026-07-28",
+  "x-method": "derived",
+  "x-source": "gtfs/amtrak-gtfs.zip",
+  "type": "object",
+  "properties": {
+    "feed_info": { "type": "array", "items": { "$ref": "#/$defs/FeedInfo" } },
+    "agency": { "type": "array", "items": { "$ref": "#/$defs/Agency" } },
+    "routes": { "type": "array", "items": { "$ref": "#/$defs/Route" } },
+    "stops": { "type": "array", "items": { "$ref": "#/$defs/Stop" } },
+    "calendar": { "type": "array", "items": { "$ref": "#/$defs/CalendarService" } },
+    "trips": { "type": "array", "items": { "$ref": "#/$defs/Trip" } },
+    "stop_times": { "type": "array", "items": { "$ref": "#/$defs/StopTime" } },
+    "shapes": { "type": "array", "items": { "$ref": "#/$defs/ShapePoint" } }
+  },
+  "$defs": {
+    "GtfsDate": {
+      "type": "string",
+      "pattern": "^[0-9]{8}$",
+      "description": "GTFS service date in YYYYMMDD form."
+    },
+    "GtfsTime": {
+      "type": "string",
+      "pattern": "^[0-9]{1,3}:[0-5][0-9]:[0-5][0-9]$",
+      "description": "GTFS time in HH:MM:SS, noon-minus-twelve based; the hour may exceed 23 for trips continuing past midnight."
+    },
+    "ServiceFlag": {
+      "type": "integer",
+      "enum": [0, 1],
+      "description": "1 = service runs on this weekday, 0 = it does not."
+    },
+    "FeedInfo": {
+      "type": "object",
+      "description": "feed_info.txt - one row in the Amtrak archive.",
+      "required": ["feed_publisher_name", "feed_publisher_url", "feed_lang"],
+      "properties": {
+        "feed_publisher_name": { "type": "string", "examples": ["Amtrak"] },
+        "feed_publisher_url": { "type": "string", "format": "uri", "examples": ["http://www.amtrak.com"] },
+        "feed_lang": { "type": "string", "examples": ["en"] },
+        "default_lang": { "type": "string", "examples": ["en"] },
+        "feed_start_date": { "$ref": "#/$defs/GtfsDate", "examples": ["20260728"] },
+        "feed_end_date": { "$ref": "#/$defs/GtfsDate", "examples": ["20260803"] },
+        "feed_version": { "type": "string", "description": "Amtrak uses a YYYYMMDD datestamp as the feed version.", "examples": ["20260727"] },
+        "feed_contact_email": { "type": "string", "format": "email", "examples": ["DL_DTGTFSsupport@Amtrak.com"] },
+        "feed_contact_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "Agency": {
+      "type": "object",
+      "description": "agency.txt - 20 rows: Amtrak (agency_id 51), Via Rail Canada (157), and the Thruway bus and charter operators.",
+      "required": ["agency_id", "agency_name", "agency_url", "agency_timezone"],
+      "properties": {
+        "agency_id": { "type": "string", "description": "Opaque Amtrak-internal integer rendered as a string.", "examples": ["51", "157"] },
+        "agency_name": { "type": "string", "examples": ["Amtrak", "Via Rail Canada"] },
+        "agency_url": { "type": "string", "format": "uri" },
+        "agency_timezone": { "type": "string", "description": "IANA timezone. Every row in the Amtrak archive is America/New_York.", "examples": ["America/New_York"] },
+        "agency_lang": { "type": "string", "examples": ["en"] }
+      }
+    },
+    "Route": {
+      "type": "object",
+      "description": "routes.txt - 61 rows, 49 with route_type 2 (rail) and 12 with route_type 3 (bus). route_short_name is empty throughout; identity lives in route_long_name.",
+      "required": ["route_id", "route_type"],
+      "properties": {
+        "route_id": { "type": "string", "description": "Opaque Amtrak-internal integer; no external meaning and not guaranteed stable between editions.", "examples": ["43", "18650", "42920"] },
+        "agency_id": { "type": "string" },
+        "route_short_name": { "type": "string", "description": "Empty in every Amtrak row." },
+        "route_long_name": { "type": "string", "examples": ["Acela", "California Zephyr", "Amtrak Thruway Connecting Service"] },
+        "route_type": { "type": "integer", "enum": [2, 3], "description": "2 = rail, 3 = bus. Only these two values appear in the Amtrak archive." },
+        "route_url": { "type": "string", "format": "uri" },
+        "route_color": { "type": "string", "pattern": "^[0-9A-Fa-f]{6}$", "examples": ["CAE4F1"] },
+        "route_text_color": { "type": "string", "pattern": "^[0-9A-Fa-f]{6}$", "examples": ["000000"] }
+      }
+    },
+    "Stop": {
+      "type": "object",
+      "description": "stops.txt - 646 rows. stop_id and stop_code are both the Amtrak three-letter station code and are identical in every row.",
+      "required": ["stop_id", "stop_name", "stop_lat", "stop_lon"],
+      "properties": {
+        "stop_id": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "Amtrak three-letter station code.", "examples": ["CHI", "ABE", "ABQ"] },
+        "stop_code": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "Identical to stop_id in every Amtrak row." },
+        "stop_name": { "type": "string", "examples": ["Aberdeen Amtrak Station", "Albuquerque Alvarado Transportation Center"] },
+        "stop_url": { "type": "string", "format": "uri", "description": "https://www.amtrak.com/stations/<lowercased station code>." },
+        "stop_timezone": { "type": "string", "examples": ["America/New_York", "America/Denver"] },
+        "stop_lat": { "type": "number", "minimum": -90, "maximum": 90 },
+        "stop_lon": { "type": "number", "minimum": -180, "maximum": 180 }
+      }
+    },
+    "CalendarService": {
+      "type": "object",
+      "description": "calendar.txt - 403 rows spanning service dates 20260726 to 20270726. Amtrak ships no calendar_dates.txt, so there are no service exceptions.",
+      "required": ["service_id", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "start_date", "end_date"],
+      "properties": {
+        "service_id": { "type": "string", "description": "Opaque Amtrak-internal integer.", "examples": ["312762077207"] },
+        "monday": { "$ref": "#/$defs/ServiceFlag" },
+        "tuesday": { "$ref": "#/$defs/ServiceFlag" },
+        "wednesday": { "$ref": "#/$defs/ServiceFlag" },
+        "thursday": { "$ref": "#/$defs/ServiceFlag" },
+        "friday": { "$ref": "#/$defs/ServiceFlag" },
+        "saturday": { "$ref": "#/$defs/ServiceFlag" },
+        "sunday": { "$ref": "#/$defs/ServiceFlag" },
+        "start_date": { "$ref": "#/$defs/GtfsDate" },
+        "end_date": { "$ref": "#/$defs/GtfsDate" }
+      }
+    },
+    "Trip": {
+      "type": "object",
+      "description": "trips.txt - 2,948 rows.",
+      "required": ["route_id", "service_id", "trip_id"],
+      "properties": {
+        "route_id": { "type": "string", "description": "Foreign key into routes.route_id." },
+        "service_id": { "type": "string", "description": "Foreign key into calendar.service_id." },
+        "trip_id": { "type": "string", "description": "Opaque Amtrak-internal integer.", "examples": ["182346"] },
+        "trip_short_name": { "type": "string", "description": "The public Amtrak train number - the portable identifier downstream trackers join on.", "examples": ["307", "341", "392"] },
+        "direction_id": { "type": "integer", "enum": [0, 1] },
+        "shape_id": { "type": "string", "description": "Foreign key into shapes.shape_id." },
+        "trip_headsign": { "type": "string", "examples": ["St. Louis"] }
+      }
+    },
+    "StopTime": {
+      "type": "object",
+      "description": "stop_times.txt - 37,862 rows.",
+      "required": ["trip_id", "arrival_time", "departure_time", "stop_id", "stop_sequence"],
+      "properties": {
+        "trip_id": { "type": "string", "description": "Foreign key into trips.trip_id." },
+        "arrival_time": { "$ref": "#/$defs/GtfsTime" },
+        "departure_time": { "$ref": "#/$defs/GtfsTime" },
+        "stop_id": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "Foreign key into stops.stop_id." },
+        "stop_sequence": { "type": "integer", "minimum": 0 },
+        "pickup_type": { "type": "integer", "enum": [0, 1, 2, 3] },
+        "drop_off_type": { "type": "integer", "enum": [0, 1, 2, 3] },
+        "timepoint": { "type": "integer", "enum": [0, 1] }
+      }
+    },
+    "ShapePoint": {
+      "type": "object",
+      "description": "shapes.txt - 373,236 rows, the largest member of the archive at ~17.5 MB uncompressed.",
+      "required": ["shape_id", "shape_pt_lat", "shape_pt_lon", "shape_pt_sequence"],
+      "properties": {
+        "shape_id": { "type": "string", "examples": ["256"] },
+        "shape_pt_lat": { "type": "number", "minimum": -90, "maximum": 90 },
+        "shape_pt_lon": { "type": "number", "minimum": -180, "maximum": 180 },
+        "shape_pt_sequence": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

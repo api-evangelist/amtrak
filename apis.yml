@@ -92,11 +92,37 @@ apis:
     url: https://www.transit.land/operators/o-9-amtrak
   - type: Email
     url: mailto:DL_DTGTFSsupport@Amtrak.com
+  - type: JSONSchema
+    url: json-schema/amtrak-gtfs-schema.json
+  - type: DataModel
+    url: data-model/amtrak-data-model.yml
 common:
+- type: Authentication
+  url: authentication/amtrak-authentication.yml
+- type: Conventions
+  url: conventions/amtrak-conventions.yml
+- type: Lifecycle
+  url: lifecycle/amtrak-lifecycle.yml
+- type: Conformance
+  url: conformance/amtrak-conformance.yml
+- type: Packages
+  url: packages/amtrak-packages.yml
+- type: LLMsTxt
+  url: llms/amtrak-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/amtrak-domain-security.yml
 - type: Website
   url: https://www.amtrak.com/
 - type: Newsroom
   url: https://media.amtrak.com/
+- type: BlogRSS
+  url: https://media.amtrak.com/rss/
+- type: TermsOfService
+  url: https://media.amtrak.com/terms-of-use/
+- type: PrivacyPolicy
+  url: https://media.amtrak.com/privacy-policy/
 - type: TravelAgentPortal
   url: https://portal.railagent.com/
 - type: GitHubOrganization

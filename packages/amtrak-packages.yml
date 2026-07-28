@@ -1,0 +1,94 @@
+generated: '2026-07-28'
+method: searched
+source: npm, PyPI, RubyGems, crates.io and pkg.go.dev registry queries on 2026-07-28
+summary: >-
+  Amtrak ships no client library in any language. Every package below is
+  community-built and unaffiliated - none is published by the National Railroad
+  Passenger Corporation, none is listed on an Amtrak page, and none is
+  supported by Amtrak. They are recorded because they are the de facto
+  integration surface for Amtrak data, and because most of them do not consume
+  the one contract Amtrak publishes: they scrape amtrak.com or decrypt the
+  undocumented maps.amtrak.com Track Your Train payload. No SDKs pointer is
+  emitted in apis.yml, because Amtrak has no SDK.
+official_packages: []
+official_count: 0
+community_packages:
+- language: javascript
+  registry: npm
+  name: amtrak
+  url: https://www.npmjs.com/package/amtrak
+  install: npm install amtrak
+  version_seen: 3.0.15
+  repository: https://github.com/piemadd/amtrak
+  author: Piero Maddaleni
+  official: false
+  consumes: undocumented maps.amtrak.com Track Your Train payload (decrypted)
+  description: Parses data from Amtrak's undocumented train tracking backend.
+- language: rust
+  registry: crates.io
+  name: amtrak-api
+  url: https://crates.io/crates/amtrak-api
+  install: cargo add amtrak-api
+  version_seen: 0.2.0
+  downloads_seen: 9147
+  repository: https://github.com/StefanBossbaly/amtrak-api/
+  official: false
+  consumes: undocumented Amtrak train/station endpoints
+  description: Amtrak async Rust API client. The crate documents itself as an unofficial implementation not affiliated with Amtrak.
+- language: rust
+  registry: crates.io
+  name: amtrak-gtfs-rt
+  url: https://crates.io/crates/amtrak-gtfs-rt
+  install: cargo add amtrak-gtfs-rt
+  version_seen: 0.9.1
+  downloads_seen: 51425
+  repository: https://github.com/catenarytransit/amtrak-gtfs-rt
+  official: false
+  consumes: maps.amtrak.com Track-A-Train, converted to GTFS-Realtime
+  description: >-
+    Synthesises the GTFS-Realtime feed Amtrak does not publish by decrypting
+    Track-A-Train and emitting valid GTFS-rt vehicle and trip entities. The most
+    downloaded Amtrak package in any registry - a direct measure of the demand
+    Amtrak's missing realtime feed leaves unmet.
+- language: ruby
+  registry: rubygems
+  name: amtrak
+  url: https://rubygems.org/gems/amtrak
+  install: gem install amtrak
+  version_seen: 3.1.0
+  repository: https://github.com/tlunter/amtrak_gem
+  author: Todd Lunter
+  official: false
+  consumes: scrapes amtrak.com
+  description: Scrape train times from Amtrak.com.
+registries_probed:
+- registry: npm
+  result: no first-party Amtrak namespace or package; community packages only
+- registry: pypi
+  result: >-
+    a name-squatted placeholder exists at https://pypi.org/project/amtrak/
+    (version 0.0.1, no author, no summary, no repository) - not first-party and
+    not functional; amtrak-api, pyamtrak and amtrakpy are all 404
+- registry: rubygems
+  result: one community gem (tlunter/amtrak_gem)
+- registry: crates.io
+  result: two community crates, both explicitly unofficial
+- registry: pkg.go.dev
+  result: no first-party Amtrak module
+- registry: maven central
+  result: no first-party Amtrak artifact
+- registry: nuget
+  result: no first-party Amtrak package
+- registry: packagist
+  result: no first-party Amtrak package
+related_community_projects:
+- https://github.com/piemadd/Piero-Amtrak-API-Docs
+- https://github.com/mgwalker/amtrak-api
+- https://github.com/kurtraschke/amtk-gtfsrealtime
+- https://api.amtraker.com
+- name: '@pipeworx/mcp-amtrak'
+  url: https://www.npmjs.com/package/@pipeworx/mcp-amtrak
+  note: community MCP server wrapping the community Amtraker API - not an Amtrak-published MCP server
+- name: '@striderlabs/mcp-amtrak'
+  url: https://www.npmjs.com/package/@striderlabs/mcp-amtrak
+  note: community MCP connector - not an Amtrak-published MCP server

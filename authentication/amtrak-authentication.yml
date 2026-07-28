@@ -1,0 +1,38 @@
+generated: '2026-07-28'
+method: probed
+source: live HTTP probe of https://content.amtrak.com/content/gtfs/GTFS.zip
+summary:
+  types: [none]
+  api_key_in: []
+  oauth2_flows: []
+  note: >-
+    Amtrak's one published contract requires no authentication of any kind. The
+    transactional Amtrak API family is unpublished and its authentication model
+    could not be verified first-party.
+schemes:
+- name: none
+  type: none
+  applies_to: Amtrak GTFS Schedule Feed
+  source: probed https://content.amtrak.com/content/gtfs/GTFS.zip
+  description: >-
+    Anonymous, unauthenticated HTTPS GET. Verified 2026-07-28: the archive
+    returns HTTP 200 with Content-Type application/zip and 19,244,661 bytes to a
+    plain curl with no credentials, no API key, no cookie, no Referer and no
+    User-Agent requirement. There is no registration form, no click-through, no
+    OAuth, no bearer token and no rate limit advertised or observed.
+unpublished:
+  transactional_api:
+    status: not-published
+    note: >-
+      Shopping, booking, payment, ticketing and servicing are reached through
+      accredited intermediaries (Travelport Universal API, Sabre, SilverRail,
+      Travelfusion, RailKey Technologies) or the login-only RailAgent portal at
+      https://portal.railagent.com. Credentials are issued by the intermediary
+      after an Amtrak accreditation document, a test-case worksheet and a
+      three-week joint UAT. Amtrak itself publishes no auth documentation.
+    evidence: https://support.travelport.com/webhelp/uapi/Content/Rail/Shared_Rail_Topics/Amtrak_Carrier_Requirements.htm
+  discovery_documents:
+    openid_configuration: 404 on content.amtrak.com, 401 on api.amtrak.com
+    oauth_authorization_server: 404 on content.amtrak.com, 401 on api.amtrak.com
+docs: null
+docs_note: Amtrak publishes no authentication documentation page.

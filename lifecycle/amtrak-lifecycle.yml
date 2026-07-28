@@ -1,0 +1,77 @@
+generated: '2026-07-28'
+method: derived
+source: >-
+  gtfs/amtrak-gtfs.zip (feed_info.txt, calendar.txt) plus live HTTP HEAD of
+  https://content.amtrak.com/content/gtfs/GTFS.zip and DNS probes of the
+  amtrak.com estate
+summary: >-
+  Amtrak publishes no lifecycle documentation of any kind - no versioning
+  policy, no deprecation policy, no support window, no SLA, no status page and
+  no changelog. Everything recorded here is derived from the payload and the
+  response headers of the one feed Amtrak publishes.
+versioning:
+  scheme: datestamp-in-payload
+  current: '20260727'
+  location: feed_info.txt feed_version
+  url_stability: >-
+    The URL https://content.amtrak.com/content/gtfs/GTFS.zip is unversioned and
+    has been the stable location for the feed as registered with the Mobility
+    Database (mdb-11) and Transitland (o-9-amtrak).
+  policy_url: null
+  policy_published: false
+validity_window:
+  feed_start_date: '20260728'
+  feed_end_date: '20260803'
+  declared_in: feed_info.txt
+  note: >-
+    feed_info declares a one-week validity window, which is the only cadence
+    signal Amtrak gives. calendar.txt however carries service records spanning
+    20260726 to 20270726, so the schedule data itself reaches a full year ahead.
+  calendar_span:
+    start: '20260726'
+    end: '20270726'
+    service_records: 403
+freshness:
+  last_modified_observed: Mon, 27 Jul 2026 15:00:07 GMT
+  etag_observed: '"cad0fde23bb090325a0626519c0fdfd6:1785164405.67323"'
+  change_detection: conditional GET on ETag / If-Modified-Since only
+  notification_channel: none
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  deprecated_operations: []
+  note: >-
+    No RFC 8594 Sunset or Deprecation header is sent, and no deprecation policy
+    exists because no versioned API surface exists. The one deprecation event
+    observable on the Amtrak estate is on the distribution side, not the data
+    side - the legacy per-GDS RailAgent hosts (amtrak, aaa, amadeus, amtraktour
+    and tln .railagent.com) now 302 to a deprecation notice at
+    maintenance.railagent.com pointing at https://portal.railagent.com.
+sla:
+  url: null
+  published: false
+  uptime_target: null
+status_page:
+  url: null
+  published: false
+  probe: status.amtrak.com is NXDOMAIN (2026-07-28)
+  note: >-
+    Amtrak publishes service alerts for passengers on media.amtrak.com under
+    Service Updates, but that is a rider-facing news page, not an API or
+    platform status page.
+changelog:
+  url: null
+  published: false
+  note: >-
+    No dated changelog for the feed. The only change signal is the feed_version
+    datestamp and the HTTP ETag.
+support:
+  contact_email: DL_DTGTFSsupport@Amtrak.com
+  source: feed_info.txt feed_contact_email
+  contact_url: http://www.amtrak.com
+  note: >-
+    The GTFS support distribution list is declared inside the feed itself. It is
+    the only first-party support channel Amtrak publishes for the data, and it
+    appears nowhere on amtrak.com.

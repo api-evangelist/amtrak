@@ -61,10 +61,32 @@ Amtrak's complete national timetable published as a static General Transit Feed 
 ## Common Properties
 
 - [Website](https://www.amtrak.com/)
-- [Newsroom](https://media.amtrak.com/)
+- [Newsroom](https://media.amtrak.com/) — [RSS](https://media.amtrak.com/rss/)
+- [Web Notices and Site Terms of Use](https://media.amtrak.com/terms-of-use/) — the only first-party Amtrak terms reachable by a non-browser client
+- [Privacy Policy](https://media.amtrak.com/privacy-policy/)
 - [Travel Agent Portal](https://portal.railagent.com/)
 - [GitHub Organization](https://github.com/Amtrak)
 - [LinkedIn](https://www.linkedin.com/company/amtrak)
+
+## Artifacts
+
+Everything below was derived from the harvested GTFS archive or probed live on 2026-07-28. Amtrak publishes none of it.
+
+| Artifact | File | Method |
+| --- | --- | --- |
+| Authentication | [`authentication/amtrak-authentication.yml`](authentication/amtrak-authentication.yml) | probed — none required |
+| API conventions | [`conventions/amtrak-conventions.yml`](conventions/amtrak-conventions.yml) | derived |
+| Lifecycle | [`lifecycle/amtrak-lifecycle.yml`](lifecycle/amtrak-lifecycle.yml) | derived |
+| Conformance | [`conformance/amtrak-conformance.yml`](conformance/amtrak-conformance.yml) | derived |
+| Data model | [`data-model/amtrak-data-model.yml`](data-model/amtrak-data-model.yml) | derived |
+| JSON Schema | [`json-schema/amtrak-gtfs-schema.json`](json-schema/amtrak-gtfs-schema.json) | derived |
+| Packages | [`packages/amtrak-packages.yml`](packages/amtrak-packages.yml) | searched — zero official, four community |
+| llms.txt | [`llms/amtrak-llms.txt`](llms/amtrak-llms.txt) | generated |
+| Agent skill | [`skills/amtrak-gtfs-schedule-lookup.md`](skills/amtrak-gtfs-schedule-lookup.md) | generated |
+| Well-known | [`well-known/amtrak-well-known.yml`](well-known/amtrak-well-known.yml) | searched — nothing published on any host |
+| Domain security | [`security/amtrak-domain-security.yml`](security/amtrak-domain-security.yml) | probed |
+
+Deliberately absent, because Amtrak publishes no such thing: OpenAPI, AsyncAPI, GraphQL, webhooks, MCP server, SDKs, CLI, sandbox, changelog, status page, deprecation policy, vulnerability disclosure programme, trust centre, OAuth scopes and Postman collection. `trust.`, `security.` and `status.amtrak.com` are NXDOMAIN; `/.well-known/security.txt` is 404 or 401 on every resolving host.
 
 ## Switching Cost
 

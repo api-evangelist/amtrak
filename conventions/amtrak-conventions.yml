@@ -1,0 +1,110 @@
+generated: '2026-07-28'
+method: derived
+source: >-
+  live HTTP HEAD/GET of https://content.amtrak.com/content/gtfs/GTFS.zip plus
+  the harvested archive at gtfs/amtrak-gtfs.zip
+scope: >-
+  These conventions describe the ONE contract Amtrak publishes - a static GTFS
+  archive fetched over HTTPS. Amtrak documents none of them; every value below
+  was observed on the wire or read out of the harvested feed. There is no
+  first-party page describing the feed, so nothing here is a provider promise.
+transport:
+  protocol: https
+  method: GET
+  url: https://content.amtrak.com/content/gtfs/GTFS.zip
+  server: AkamaiNetStorage
+  content_type: application/zip
+  bytes_observed: 19244661
+  range_requests: true
+  accept_ranges: bytes
+authentication:
+  style: none
+  detail: see authentication/amtrak-authentication.yml
+caching:
+  etag: true
+  etag_observed: '"cad0fde23bb090325a0626519c0fdfd6:1785164405.67323"'
+  last_modified: true
+  last_modified_observed: Mon, 27 Jul 2026 15:00:07 GMT
+  cache_control: max-age=0, no-cache, no-store
+  pragma: no-cache
+  guidance: >-
+    Amtrak sends no-cache/no-store but does send a stable ETag and
+    Last-Modified. Conditional GET with If-None-Match or If-Modified-Since is
+    the correct polling convention for this feed - it is the only mechanism
+    Amtrak offers for detecting a new edition, since there is no changelog,
+    no version endpoint and no notification channel.
+pagination:
+  supported: false
+  detail: >-
+    Not applicable. The feed is a single whole-dataset download; every consumer
+    receives all 20 agencies, 61 routes, 646 stops, 2,948 trips, 37,862 stop
+    times and 373,236 shape points on every fetch. There is no query interface,
+    no filter parameter and no partial retrieval other than HTTP byte ranges.
+filtering_and_query:
+  supported: false
+  detail: No query string, no search, no field selection, no sparse fieldsets.
+idempotency:
+  supported: false
+  detail: >-
+    No idempotency contract exists and none is needed - the only operation is a
+    read. Amtrak publishes no write surface, so there is no Idempotency-Key
+    header, no request-replay window and no idempotency documentation.
+rate_limiting:
+  documented: false
+  observed_headers: []
+  detail: >-
+    No X-RateLimit-*, no Retry-After and no 429 was observed. Amtrak publishes
+    no rate limit for this feed. Treat the absence as an unstated limit rather
+    than a licence to poll aggressively; the feed changes at most daily and the
+    feed_version datestamp moves roughly weekly.
+request_tracing:
+  header: x-akamai-reference-id
+  example: 0.f224c317.1785249334.4c30ecf1
+  detail: >-
+    An Akamai edge reference id is returned on every response. It identifies the
+    edge transaction for support escalation, not an Amtrak application request.
+    Amtrak publishes no request-id convention of its own.
+error_envelope:
+  format: none
+  detail: >-
+    No structured error body. Failures surface as bare HTTP status codes from
+    the edge - 404 for any other path on content.amtrak.com, 401 across
+    api.amtrak.com, and a connection reset or 403 from Akamai bot mitigation on
+    www.amtrak.com. No application/problem+json, no RFC 9457, no error codes.
+versioning:
+  scheme: feed_version datestamp inside the payload
+  current: '20260727'
+  location: feed_info.txt feed_version
+  url_versioning: false
+  detail: >-
+    The URL is unversioned and immutable; the edition is identified only by the
+    feed_version field inside feed_info.txt and by the HTTP ETag/Last-Modified.
+    feed_info.txt also declares a feed_start_date of 20260728 and a
+    feed_end_date of 20260803 - a one-week validity window - while calendar.txt
+    carries service dates out to 20270726. See lifecycle/amtrak-lifecycle.yml.
+encoding:
+  container: zip
+  member_format: csv (comma-separated, RFC 4180 style, CRLF)
+  character_set: utf-8 with BOM on some members
+  files: 8
+  detail: >-
+    agency.txt, calendar.txt, feed_info.txt, routes.txt, shapes.txt,
+    stops.txt, stop_times.txt, trips.txt. Read with a BOM-tolerant reader
+    (encoding='utf-8-sig') - the harvested archive carries a byte-order mark.
+identifiers:
+  stop_id: Amtrak three-letter station code (CHI, ABE, ABQ) - also repeated in stop_code
+  trip_short_name: the public Amtrak train number (307, 341, 392)
+  route_id: opaque Amtrak-internal integer, no external meaning
+  trip_id: opaque Amtrak-internal integer
+  service_id: opaque Amtrak-internal integer
+  agency_id: opaque Amtrak-internal integer
+  detail: >-
+    Only stop_id/stop_code and trip_short_name are portable identifiers a
+    consumer can join on across systems. Everything else is Amtrak-internal and
+    is not guaranteed stable between editions.
+cross_links:
+  authentication: authentication/amtrak-authentication.yml
+  lifecycle: lifecycle/amtrak-lifecycle.yml
+  conformance: conformance/amtrak-conformance.yml
+  data_model: data-model/amtrak-data-model.yml
+  domain_security: security/amtrak-domain-security.yml

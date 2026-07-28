@@ -1,0 +1,63 @@
+generated: '2026-07-28'
+method: searched
+source: live HTTP probes of every host in apis.yml (baseURL, humanURL, common[])
+summary: >-
+  No /.well-known/ discovery document of any kind is published anywhere on the
+  Amtrak estate. Every path below was probed live on 2026-07-28 with a full
+  browser User-Agent and redirect following. content.amtrak.com - the host that
+  serves the only machine-readable contract Amtrak publishes - answers 404 on
+  every /.well-known/ path and on its own root. api.amtrak.com answers 401 on
+  every path from Akamai NetStorage. www.amtrak.com does not complete a request
+  from any non-browser client at all (Akamai bot mitigation; connection reset or
+  403). media.amtrak.com, the WP Engine-hosted newsroom, 404s. No security.txt,
+  no OIDC discovery, no OAuth authorization-server metadata, no api-catalog, no
+  ai-plugin.json, no llms.txt. This artifact records the absence as verified
+  data - there is nothing to save verbatim.
+hosts:
+- host: https://content.amtrak.com
+  role: API host (GTFS static archive)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /openapi.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: https://api.amtrak.com
+  role: Akamai NetStorage credentialed asset host - not a documented API
+  documents:
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /openapi.json
+    status: 401
+- host: https://www.amtrak.com
+  role: consumer website
+  documents:
+  - path: /.well-known/security.txt
+    status: 0
+    note: connection refused/reset to non-browser clients (Akamai bot mitigation)
+  - path: /.well-known/api-catalog
+    status: 0
+    note: connection refused/reset to non-browser clients
+  - path: /llms.txt
+    status: 0
+    note: connection refused/reset to non-browser clients
+- host: https://media.amtrak.com
+  role: Amtrak Media newsroom (WP Engine)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /llms.txt
+    status: 404
+  - path: /robots.txt
+    status: 200
+    note: standard WordPress robots.txt only - no discovery value, not saved
+files: []

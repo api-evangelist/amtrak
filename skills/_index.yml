@@ -1,0 +1,30 @@
+generated: '2026-07-28'
+method: generated
+source: >-
+  gtfs/amtrak-gtfs.zip plus live probes of content.amtrak.com. Amtrak publishes
+  no OpenAPI and no AGENTS.md or skill files of its own, so the skill below is
+  grounded in the real member files and column names of the GTFS archive rather
+  than in operationIds.
+skills:
+- file: amtrak-gtfs-schedule-lookup.md
+  name: Amtrak GTFS schedule lookup
+  description: >-
+    Fetch, poll, parse and query the Amtrak GTFS Schedule Feed - the only public
+    Amtrak contract - and know exactly what it cannot answer.
+  api: gtfs/amtrak-gtfs.zip
+  contract: https://content.amtrak.com/content/gtfs/GTFS.zip
+  operations:
+  - GET https://content.amtrak.com/content/gtfs/GTFS.zip
+  - feed_info.txt
+  - agency.txt
+  - routes.txt
+  - stops.txt
+  - calendar.txt
+  - trips.txt
+  - stop_times.txt
+  - shapes.txt
+not_covered:
+  reason: >-
+    No skill is authored for shopping, booking, payment, ticketing, servicing or
+    loyalty. Amtrak publishes no contract for any of them, and inventing one
+    would be fabrication.

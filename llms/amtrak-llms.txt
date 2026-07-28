@@ -1,0 +1,50 @@
+# Amtrak
+
+> Amtrak (the National Railroad Passenger Corporation) is the federally chartered operator of the United States national intercity passenger rail network. It publishes exactly one machine-readable contract — a static GTFS schedule archive — and documents it nowhere. Everything transactional (shopping, booking, payment, ticketing, servicing, loyalty) is closed and reached only through accredited intermediaries.
+
+Generated 2026-07-28 by the API Evangelist enrichment pipeline from https://raw.githubusercontent.com/api-evangelist/amtrak/refs/heads/main/apis.yml. Amtrak publishes no llms.txt of its own; /llms.txt is 404 on content.amtrak.com and media.amtrak.com and unreachable on www.amtrak.com.
+
+## What you can actually call
+
+- [Amtrak GTFS Schedule Feed](https://content.amtrak.com/content/gtfs/GTFS.zip): The only public Amtrak contract. Anonymous HTTPS GET, no key, no registration, no click-through, no rate limit. Returns ~19 MB of application/zip. Edition 20260727 holds 8 GTFS files covering 20 agencies, 61 routes (49 rail, 12 bus), 646 stops, 2,948 trips, 37,862 stop times and 373,236 shape points, with calendar service dates spanning 20260726 to 20270726.
+- [Mobility Database mdb-11](https://mobilitydatabase.org/feeds/gtfs/mdb-11): Third-party registry entry — the only place the feed is actually advertised.
+- [Transitland o-9-amtrak](https://www.transit.land/operators/o-9-amtrak): Second third-party registry entry.
+
+## Specs and schemas
+
+- [GTFS Schedule reference](https://gtfs.org/documentation/schedule/reference/): The standard the feed conforms to. Amtrak publishes no schema of its own.
+- [amtrak-gtfs-schema.json](json-schema/amtrak-gtfs-schema.json): JSON Schema for every record type actually present in Amtrak's archive, derived from the harvested feed.
+- [amtrak-data-model.yml](data-model/amtrak-data-model.yml): Entity graph, real column lists, row counts and foreign keys.
+
+## How to use it correctly
+
+- [amtrak-conventions.yml](conventions/amtrak-conventions.yml): Transport, caching (ETag + Last-Modified conditional GET is the only change-detection mechanism), encoding (zip of UTF-8-with-BOM CSV), identifiers, and the absence of pagination, filtering, idempotency and rate-limit signalling.
+- [amtrak-authentication.yml](authentication/amtrak-authentication.yml): None. Anonymous GET, verified live.
+- [amtrak-lifecycle.yml](lifecycle/amtrak-lifecycle.yml): Versioning is a `feed_version` datestamp inside `feed_info.txt`; a one-week `feed_start_date`/`feed_end_date` validity window; no SLA, no status page, no deprecation policy, no changelog.
+- [amtrak-conformance.yml](conformance/amtrak-conformance.yml): GTFS Schedule static only. No GTFS-Realtime, no GTFS-Fares, no OSDM, no NDC, no OpenAPI, no AsyncAPI, no GraphQL, no OAuth, no security.txt.
+- [amtrak-gtfs-schedule-lookup.md](skills/amtrak-gtfs-schedule-lookup.md): Packaged agent skill for fetching, parsing and querying the feed.
+
+## What does not exist
+
+- No developer portal. `developer.amtrak.com`, `docs.amtrak.com`, `data.amtrak.com` and `partners.amtrak.com` are NXDOMAIN. `developers.amtrak.com` resolves only to a Microsoft Entra application proxy fronting an internal app.
+- No OpenAPI, Swagger, AsyncAPI, GraphQL schema, Postman collection or Arazzo workflow anywhere on the Amtrak estate or in APIs.guru.
+- No `/.well-known/` document of any kind — see [amtrak-well-known.yml](well-known/amtrak-well-known.yml).
+- No GTFS-Realtime feed, despite Amtrak running a live train-tracking map whose payload it encrypts.
+- No first-party SDK, CLI or UI component in any registry — see [amtrak-packages.yml](packages/amtrak-packages.yml). Every Amtrak package on npm, RubyGems and crates.io is community-built and unaffiliated.
+- No published terms of use, licence or attribution requirement for the GTFS feed.
+- No status page, no trust centre, no vulnerability disclosure programme (`status.`, `trust.` and `security.amtrak.com` are all NXDOMAIN).
+- `api.amtrak.com` exists but is Akamai NetStorage answering 401 on every path — a credentialed asset host, not a documented API.
+- `www.amtrak.com` refuses every non-browser client (Akamai bot mitigation), so Amtrak's own terms and privacy pages are not machine-readable from the consumer host.
+
+## Getting a transactional integration
+
+A developer does not sign up for an Amtrak API. Amtrak content reaches booking tools through Travelport Universal API, Sabre, Apollo and Worldspan on the RailAgent channel, and rail aggregators including SilverRail, Travelfusion and RailKey Technologies. Travelport's published Amtrak carrier requirements set the gate: an Amtrak accreditation document and test-case worksheet, a documented Look/Book/Pay/eTicket plus Cancel/Refund/Travel-Document-Delivery build, and a three-week joint UAT before production credentials are issued.
+
+- [Travelport Amtrak Carrier Requirements](https://support.travelport.com/webhelp/uapi/Content/Rail/Shared_Rail_Topics/Amtrak_Carrier_Requirements.htm)
+- [RailAgent portal](https://portal.railagent.com/) — login-only, no public registration path.
+
+## First-party pages that are reachable
+
+- [Amtrak](https://www.amtrak.com/) — 403/reset to non-browser clients.
+- [Amtrak Media newsroom](https://media.amtrak.com/) — the one Amtrak host that serves readable first-party content, including the [Web Notices and Site Terms of Use](https://media.amtrak.com/terms-of-use/) and the [Privacy Policy](https://media.amtrak.com/privacy-policy/).
+- [GTFS support contact](mailto:DL_DTGTFSsupport@Amtrak.com) — declared inside `feed_info.txt`, and published nowhere else.

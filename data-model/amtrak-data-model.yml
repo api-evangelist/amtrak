@@ -1,0 +1,128 @@
+generated: '2026-07-28'
+method: derived
+source: gtfs/amtrak-gtfs.zip (feed_version 20260727), columns and counts read from the archive
+note: >-
+  Derived from the harvested feed itself, not from documentation - Amtrak
+  publishes no object reference. Column lists are the exact header rows of each
+  member file; row counts exclude the header. Semantics follow the GTFS Schedule
+  reference at https://gtfs.org/documentation/schedule/reference/.
+entities:
+- name: feed_info
+  file: feed_info.txt
+  rows: 1
+  primary_key: null
+  fields: [feed_publisher_name, feed_publisher_url, feed_lang, default_lang, feed_start_date, feed_end_date, feed_version, feed_contact_email, feed_contact_url]
+  values:
+    feed_publisher_name: Amtrak
+    feed_publisher_url: http://www.amtrak.com
+    feed_lang: en
+    feed_version: '20260727'
+    feed_contact_email: DL_DTGTFSsupport@Amtrak.com
+- name: agency
+  file: agency.txt
+  rows: 20
+  primary_key: agency_id
+  fields: [agency_id, agency_name, agency_url, agency_timezone, agency_lang]
+  note: >-
+    Amtrak itself is agency_id 51. The other 19 are Thruway bus and charter
+    operators (Roadrunner Shuttle, Arrow Trailways, Coach Usa, FLIX, Beeline
+    Express, Vegas Airporter, Stagecoach Express, The Lift, Executive
+    Transportation, Alvand Transportation, Route 66 Express, Sunway Charters,
+    Amtrak Chartered Vehicle/Motorcoach, Shore Line East, MARC) plus Via Rail
+    Canada (agency_id 157), the partner on the jointly operated Maple Leaf.
+- name: routes
+  file: routes.txt
+  rows: 61
+  primary_key: route_id
+  fields: [route_id, agency_id, route_short_name, route_long_name, route_type, route_url, route_color, route_text_color]
+  breakdown:
+    route_type_2_rail: 49
+    route_type_3_bus: 12
+    distinct_route_long_name: 48
+  note: >-
+    route_short_name is empty throughout; route identity is carried entirely in
+    route_long_name (Acela, Auto Train, California Zephyr, Coast Starlight,
+    Empire Builder, Crescent, Cardinal, Amtrak Cascades, Capitol Corridor,
+    Amtrak Hartford Line, Downeaster, Borealis, Berkshire Flyer, Floridian,
+    Mardi Gras Service, Amtrak Thruway Connecting Service and 32 more).
+- name: stops
+  file: stops.txt
+  rows: 646
+  primary_key: stop_id
+  fields: [stop_id, stop_code, stop_name, stop_url, stop_timezone, stop_lat, stop_lon]
+  note: >-
+    stop_id and stop_code are both the Amtrak three-letter station code and are
+    identical in every row (CHI, ABE, ABQ, ADM). stop_url is the deep link
+    https://www.amtrak.com/stations/<lowercased code>.
+- name: calendar
+  file: calendar.txt
+  rows: 403
+  primary_key: service_id
+  fields: [service_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_date, end_date]
+  span: {start: '20260726', end: '20270726'}
+- name: trips
+  file: trips.txt
+  rows: 2948
+  primary_key: trip_id
+  fields: [route_id, service_id, trip_id, trip_short_name, direction_id, shape_id, trip_headsign]
+  note: trip_short_name is the public Amtrak train number - the key downstream tracking projects join on.
+- name: stop_times
+  file: stop_times.txt
+  rows: 37862
+  primary_key: [trip_id, stop_sequence]
+  fields: [trip_id, arrival_time, departure_time, stop_id, stop_sequence, pickup_type, drop_off_type, timepoint]
+- name: shapes
+  file: shapes.txt
+  rows: 373236
+  primary_key: [shape_id, shape_pt_sequence]
+  fields: [shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence]
+relationships:
+- from: routes
+  to: agency
+  type: belongs_to
+  via: agency_id
+- from: trips
+  to: routes
+  type: belongs_to
+  via: route_id
+- from: trips
+  to: calendar
+  type: belongs_to
+  via: service_id
+- from: trips
+  to: shapes
+  type: belongs_to
+  via: shape_id
+- from: routes
+  to: trips
+  type: has_many
+  via: route_id
+- from: trips
+  to: stop_times
+  type: has_many
+  via: trip_id
+- from: stop_times
+  to: trips
+  type: belongs_to
+  via: trip_id
+- from: stop_times
+  to: stops
+  type: belongs_to
+  via: stop_id
+- from: stops
+  to: stop_times
+  type: has_many
+  via: stop_id
+- from: calendar
+  to: trips
+  type: has_many
+  via: service_id
+- from: shapes
+  to: trips
+  type: has_many
+  via: shape_id
+absent_entities:
+- calendar_dates (no service exceptions published)
+- fare_attributes / fare_rules / fare_products (no fare data at any GTFS generation)
+- frequencies, transfers, pathways, levels, translations, attributions
+- any reservation, order, passenger, payment or loyalty entity - the transactional data model is unpublished
