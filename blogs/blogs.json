@@ -1,0 +1,14 @@
+{
+  "repo": "amtrak",
+  "feeds": [
+    {
+      "source": "https://media.amtrak.com/",
+      "feed_url": "https://media.amtrak.com/feed/",
+      "title": "",
+      "saved": 6,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 6,
+  "fetched": "2026-08-01T15:49:00Z"
+}
