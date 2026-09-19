@@ -98,6 +98,13 @@ apis:
   baseURL: https://content.amtrak.com/content/gtfs/GTFS.zip
   tags:
   - GTFS
+  - Schedule
+  - Timetables
+  - Transit
+  - Open Data
+  - Rail
+  tags_raw:
+  - GTFS
   - Schedules
   - Timetables
   - Transit
