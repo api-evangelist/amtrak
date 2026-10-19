@@ -1,0 +1,68 @@
+edges:
+- partner_name: GTFS (MobilityData Mobility Database)
+  partner: null
+  partner_match: register
+  type: register
+  direction: partner-built
+  evidence: https://mobilitydatabase.org/feeds/mdb-11
+  category: GTFS transit feed
+  channel: standard-directory
+  relationship: standard-participant
+  contract_reference:
+    register: Mobility Database feeds export (files.mobilitydatabase.org/feeds_v2.csv, MobilityData)
+    standard: GTFS
+    spec_file: null
+    role: gtfs-feed-publisher
+    registered_name: Amtrak
+    register_id: mdb-11
+    matched_domain: amtrak.com
+    matched_by: domain
+    domain_source: feed download URL host
+    data_types: &id001
+    - gtfs
+    feed_ids_sample:
+    - mdb-11
+    official: true
+    lapsed: false
+    signal_note: 'participation only: a feed published on the provider''s own domain; feed counts, statuses and
+      locations are context, never counted. lapsed = every listed feed deprecated / inactive'
+    detected_by: sweep-transit-mobility.py
+    detected: '2026-10-18'
+  detected_by: sweep-transit-mobility.py
+  first_seen: '2026-10-18'
+- partner_name: GTFS (MobilityData Mobility Database)
+  partner: null
+  partner_match: register
+  type: register
+  direction: partner-built
+  evidence: https://mobilitydatabase.org/feeds/mdb-11
+  category: GTFS transit feed
+  channel: standard-directory
+  relationship: compatible
+  shape: gtfs
+  evidence_kind: standard-register
+  degree: published
+  report_only: true
+  note: publishes a GTFS feed on its own domain, listed in the Mobility Database (no anchor repo)
+  contract_reference:
+    register: Mobility Database feeds export (files.mobilitydatabase.org/feeds_v2.csv, MobilityData)
+    spec_file: null
+    standard: GTFS
+    role: gtfs-feed-publisher
+    registered_name: Amtrak
+    matched_domain: amtrak.com
+    data_types: *id001
+    detected_by: sweep-transit-mobility.py
+    detected: '2026-10-18'
+  detected_by: sweep-transit-mobility.py
+  first_seen: '2026-10-18'
+generated: '2026-10-18'
+method: searched
+source:
+- https://files.mobilitydatabase.org/feeds_v2.csv
+- https://github.com/MobilityData/gbfs/blob/master/systems.csv
+- https://maas-alliance.eu/
+checked:
+- https://files.mobilitydatabase.org/feeds_v2.csv
+- https://github.com/MobilityData/gbfs/blob/master/systems.csv
+- https://maas-alliance.eu/
