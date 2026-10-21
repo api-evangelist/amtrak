@@ -34,3 +34,30 @@
     detected: '2026-10-18'
   status: not-a-workflow
   arazzo: null
+- slug: amtrak-uic-international-union-of-railways
+  label: UIC (International Union of Railways)
+  partner_name: UIC (International Union of Railways)
+  category: railway union membership
+  type: register
+  channel: standard-directory
+  evidence: https://uic.org/companies/national-railroad-passenger-corporation
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: UIC members (uic.org/members/, the page's own member payload)
+    standard: UIC International Railway Solutions (IRS) / OSDM steward
+    spec_file: null
+    role: uic-member
+    registered_name: National Railroad Passenger Corporation
+    register_acronym: AMTRAK
+    register_id: https://uic.org/companies/national-railroad-passenger-corporation
+    register_country: United States of America
+    partner_tier: Associate member
+    matched_domain: amtrak.com
+    matched_by: domain
+    signal_note: 'participation only: membership of the worldwide railway union that stewards OSDM and the IRS leaflets;
+      the membership class is partner_tier, context only'
+    detected_by: sweep-rail-osdm.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null

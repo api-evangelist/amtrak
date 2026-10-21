@@ -56,6 +56,33 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-transit-mobility.py
   first_seen: '2026-10-18'
+- partner_name: UIC (International Union of Railways)
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://uic.org/companies/national-railroad-passenger-corporation
+  category: railway union membership
+  contract_reference:
+    register: UIC members (uic.org/members/, the page's own member payload)
+    standard: UIC International Railway Solutions (IRS) / OSDM steward
+    spec_file: null
+    role: uic-member
+    registered_name: National Railroad Passenger Corporation
+    register_acronym: AMTRAK
+    register_id: https://uic.org/companies/national-railroad-passenger-corporation
+    register_country: United States of America
+    partner_tier: Associate member
+    matched_domain: amtrak.com
+    matched_by: domain
+    signal_note: 'participation only: membership of the worldwide railway union that stewards OSDM and the IRS leaflets;
+      the membership class is partner_tier, context only'
+    detected_by: sweep-rail-osdm.py
+    detected: '2026-10-20'
+  detected_by: sweep-rail-osdm.py
+  first_seen: '2026-10-20'
 generated: '2026-10-18'
 method: searched
 source:
@@ -66,3 +93,13 @@ checked:
 - https://files.mobilitydatabase.org/feeds_v2.csv
 - https://github.com/MobilityData/gbfs/blob/master/systems.csv
 - https://maas-alliance.eu/
+- https://eradis.era.europa.eu/safety_docs/licences/default.aspx
+- https://osdm.io/
+- https://osdm.io/tools/implementations/
+- https://tps.thetrainline.com/our-products/global-api/
+- https://uic.org/members/
+- https://www.amtrak.com/partners
+- https://www.raildeliverygroup.com/about-us/our-members.html
+- https://www.raildeliverygroup.com/our-services/fares-and-ticketing/rdg-accreditation.html
+- https://www.rspaccreditation.org/publicDocumentation.php
+- https://www.thetrainline.com/partners
