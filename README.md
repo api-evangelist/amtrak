@@ -1,4 +1,4 @@
-# Amtrak (amtrak)
+# Amtrak
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,109 +64,93 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Amtrak (the National Railroad Passenger Corporation) is the federally chartered operator of the United States national intercity passenger rail network, headquartered in Washington, D.C. It runs the Northeast Corridor including Acela, the state-supported corridors, the long-distance network, and the Amtrak Thruway Connecting Service bus network, and its published GTFS feed covers 61 routes, 646 stops, 2,948 trips and 20 operating agencies across the United States and into Canada.
+Amtrak (the National Railroad Passenger Corporation) is the federally chartered operator of the United States national intercity passenger rail network, headquartered in Washington, D.C. It runs the Northeast Corridor including Acela, the state-supported corridors, the long-distance network, and the Amtrak Thruway Connecting Service bus network, and its published GTFS feed covers 61 routes, 646 stops, 2,948 trips and 20 operating agencies across the United States and into Canada. In the distribution chain Amtrak sits as a GDS-intermediated supplier of its own inventory: its content reaches third-party booking tools through Travelport Universal API, through Sabre, Apollo and Worldspan on the RailAgent channel, and through rail aggregators including SilverRail, Travelfusion and RailKey Technologies, alongside its own amtrak.com, mobile app and call centre. Its API posture is honestly stated as one open-standard data feed and nothing else. The only machine-readable contract Amtrak publishes is a static GTFS schedule archive at content.amtrak.com, which is completely ungated - no key, no registration, no click-through - but which Amtrak advertises nowhere: there is no developer portal, no documentation page, no OpenAPI, no AsyncAPI, no GraphQL, and no published terms of use for the feed. Everything transactional is closed. The developer., docs., data. and partners. subdomains of amtrak.com do not resolve, developers.amtrak.com resolves only to a Microsoft Entra application proxy, api.amtrak.com answers 401 on every path from Akamai NetStorage, and www.amtrak.com returns 403 to every non-browser client, so no first-party terms of service could be retrieved programmatically. A developer who wants shopping, booking, payment, ticketing or servicing does not sign up; they are accredited through Travelport or an aggregator, complete an Amtrak test-case worksheet, pass a three-week UAT, and commit to supporting Amtrak refund fees and eVoucher issuance before production credentials are issued.
 
-In the distribution chain Amtrak sits as a GDS-intermediated supplier of its own inventory: its content reaches third-party booking tools through Travelport Universal API, through Sabre, Apollo and Worldspan on the RailAgent channel, and through rail aggregators including SilverRail, Travelfusion and RailKey Technologies, alongside its own amtrak.com, mobile app and call centre.
+**Areas:** Travel · United States · Rail · Passenger Rail · Transit · GTFS · Open Data · Booking · Distribution · GDS · Corporate Travel · Travel Agents
 
-Its API posture is honestly stated as one open-standard data feed and nothing else. The only machine-readable contract Amtrak publishes is a static GTFS schedule archive at `content.amtrak.com`, which is completely ungated — no key, no registration, no click-through — but which Amtrak advertises nowhere: there is no developer portal, no documentation page, no OpenAPI, no AsyncAPI, no GraphQL, and no published terms of use for the feed. Everything transactional is closed.
+## Amtrak on APIs.io
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/amtrak/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/amtrak/refs/heads/main/apis.yml)
+Everything profiled for Amtrak is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/amtrak/](https://apis.io/providers/amtrak/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (1)
 
-- Travel
-- United States
-- Rail
-- Passenger Rail
-- Transit
-- GTFS
-- Open Data
-- Booking
-- Distribution
-- GDS
-- Corporate Travel
-- Travel Agents
-- Loyalty
+- [Amtrak GTFS Schedule Feed](https://apis.io/apis/amtrak/amtrak-gtfs-schedule-feed/) — Amtrak's complete national timetable published as a static General Transit Feed Specification archive, served from content.amtrak.com with no registration,…
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-07-28
-- **Modified:** 2026-07-28
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### JSON Schema (1)
 
-### Amtrak GTFS Schedule Feed
+The data models the API reads and writes.
 
-Amtrak's complete national timetable published as a static General Transit Feed Specification archive, served from `content.amtrak.com` with no registration, no API key, no click-through licence and no rate limit. The edition harvested on 2026-07-28 carries `feed_version` 20260727 and holds 8 GTFS files — `agency`, `calendar`, `feed_info`, `routes`, `shapes`, `stops`, `stop_times` and `trips` — covering 20 agencies, 61 routes (49 rail and 12 bus by `route_type`), 646 stops, 2,948 trips, 37,862 stop times and 373,236 shape points, with calendar service dates spanning 20260726 to 20270726.
+- [Amtrak GTFS Schedule Feed record schemas](https://apis.io/schemas/amtrak/amtrak-gtfs/)
 
-`feed_info` declares `feed_publisher_name` Amtrak and a first-party contact address of `DL_DTGTFSsupport@Amtrak.com`. This is the only machine-readable contract Amtrak publishes, and Amtrak publishes no page describing it — the URL is discoverable only through third-party registries such as the Mobility Database and Transitland.
+#### Security (2)
 
-- **Human URL:** [https://mobilitydatabase.org/feeds/gtfs/mdb-11](https://mobilitydatabase.org/feeds/gtfs/mdb-11)
-- **Base URL:** `https://content.amtrak.com/content/gtfs/GTFS.zip`
+Authentication, trust centre, and vulnerability disclosure.
 
-#### Tags
+- [Amtrak Authentication](https://apis.io/security/amtrak/amtrak-authentication/)
+- [Amtrak Domain Security](https://apis.io/security/amtrak/amtrak-domain-security/)
 
-- GTFS
-- Schedules
-- Timetables
-- Transit
-- Open Data
-- Rail
+## Where to find this API
 
-#### Properties
-
-- [GTFS](gtfs/amtrak-gtfs.zip) — [General Transit Feed Specification](https://gtfs.org/documentation/schedule/reference/)
-- [Download](https://content.amtrak.com/content/gtfs/GTFS.zip)
-- [Specification](https://gtfs.org/documentation/schedule/reference/)
-- [Registry](https://mobilitydatabase.org/feeds/gtfs/mdb-11) — Mobility Database mdb-11
-- [Registry](https://www.transit.land/operators/o-9-amtrak) — Transitland o-9-amtrak
-- [Email](mailto:DL_DTGTFSsupport@Amtrak.com)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.amtrak.com/)
-- [Newsroom](https://media.amtrak.com/) — [RSS](https://media.amtrak.com/rss/)
-- [Web Notices and Site Terms of Use](https://media.amtrak.com/terms-of-use/) — the only first-party Amtrak terms reachable by a non-browser client
-- [Privacy Policy](https://media.amtrak.com/privacy-policy/)
-- [Travel Agent Portal](https://portal.railagent.com/)
-- [GitHub Organization](https://github.com/Amtrak)
-- [LinkedIn](https://www.linkedin.com/company/amtrak)
+- [Terms of service](https://media.amtrak.com/terms-of-use/)
+- [Privacy policy](https://media.amtrak.com/privacy-policy/)
+- [GitHub](https://github.com/Amtrak)
 
-## Artifacts
+## API Evangelist rating
 
-Everything below was derived from the harvested GTFS archive or probed live on 2026-07-28. Amtrak publishes none of it.
+**Kin Score 18.7** — emerging · rubric 0.24.0 · scored 2026-10-17
 
-| Artifact | File | Method |
-| --- | --- | --- |
-| Authentication | [`authentication/amtrak-authentication.yml`](authentication/amtrak-authentication.yml) | probed — none required |
-| API conventions | [`conventions/amtrak-conventions.yml`](conventions/amtrak-conventions.yml) | derived |
-| Lifecycle | [`lifecycle/amtrak-lifecycle.yml`](lifecycle/amtrak-lifecycle.yml) | derived |
-| Conformance | [`conformance/amtrak-conformance.yml`](conformance/amtrak-conformance.yml) | derived |
-| Data model | [`data-model/amtrak-data-model.yml`](data-model/amtrak-data-model.yml) | derived |
-| JSON Schema | [`json-schema/amtrak-gtfs-schema.json`](json-schema/amtrak-gtfs-schema.json) | derived |
-| Packages | [`packages/amtrak-packages.yml`](packages/amtrak-packages.yml) | searched — zero official, four community |
-| llms.txt | [`llms/amtrak-llms.txt`](llms/amtrak-llms.txt) | generated |
-| Agent skill | [`skills/amtrak-gtfs-schedule-lookup.md`](skills/amtrak-gtfs-schedule-lookup.md) | generated |
-| Well-known | [`well-known/amtrak-well-known.yml`](well-known/amtrak-well-known.yml) | searched — nothing published on any host |
-| Domain security | [`security/amtrak-domain-security.yml`](security/amtrak-domain-security.yml) | probed |
+| Facet | Score |
+|---|---|
+| Discoverability | 74.1 |
+| Contract quality | 7.2 |
+| Contract governance | 4.5 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 13.7 |
+| Access clarity | 21.1 |
 
-Deliberately absent, because Amtrak publishes no such thing: OpenAPI, AsyncAPI, GraphQL, webhooks, MCP server, SDKs, CLI, sandbox, changelog, status page, deprecation policy, vulnerability disclosure programme, trust centre, OAuth scopes and Postman collection. `trust.`, `security.` and `status.amtrak.com` are NXDOMAIN; `/.well-known/security.txt` is 404 or 401 on every resolving host.
+**Agent readiness 3.4** — human-only
 
-## Switching Cost
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
 
-The full switching-cost analysis — interface shape, second source, exit path, identifier portability, contractual lock-in, access gate and distribution model — lives in [`review.yml`](review.yml).
+**Regulatory alignment 24.5** — Government & Public Sector
 
-| Dimension | Value |
-| --- | --- |
-| Interface shape | `open-standard` (GTFS static) — scoped to schedules only; everything transactional is `none-published` |
-| Second source | `no-alternative` for Amtrak seat inventory; multiple channels to the same inventory |
-| Exit path | `no-export-published` |
-| Identifier portability | GTFS keys with Amtrak three-letter station codes as `stop_id` / `stop_code`; Amtrak-internal numeric `route_id` / `trip_id` |
-| Contractual lock-in | Nothing published first-party — `www.amtrak.com` returns 403 to every non-browser client |
-| Access gate | `commercial-agreement` (accreditation, test-case worksheet, three-week UAT via Travelport) |
-| Distribution model | `gds-intermediated` |
-| NDC posture | Not applicable — rail operator; no IATA NDC and no UIC OSDM reference found |
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/amtrak/](https://apis.io/providers/amtrak/).
 
-## Maintainers
+## How this profile is made
 
-- Kin Lane — kin@apievangelist.com
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Amtrak: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/amtrak/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
